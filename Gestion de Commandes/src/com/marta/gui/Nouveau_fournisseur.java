@@ -84,6 +84,7 @@ public class Nouveau_fournisseur extends JDialog implements ActionListener {
 					modif_succ = new Dialog_Modif_Succes(this, "Nouveau Fournisseur");
 				}
 				modif_succ.setVisible(true);
+				modif_succ.setLocationRelativeTo(getParent());
 			}
 		else if (source == quitter) {
 			setVisible(false);

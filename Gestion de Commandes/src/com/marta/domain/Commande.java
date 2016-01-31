@@ -1,6 +1,6 @@
 package com.marta.domain;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class Commande {
 
@@ -16,6 +16,22 @@ public class Commande {
 	/**
 	 * @return the id
 	 */
+	public Commande (){};
+	
+	public Commande (int iden, String descrip, double quant,String unite,String four,
+					double prix, Date date1, Date date2, Date date3){
+		
+		this.id = iden;
+		descriptif_produit = descrip;
+		quantite = quant;
+		this.unite = unite;
+		fournisseur = four;
+		this.prix = prix;
+		date_commande  = date1;
+		date_arrivee = date2;
+		date_fin = date3;
+		
+	}
 	public int getId() {
 		return id;
 	}

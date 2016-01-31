@@ -4,8 +4,12 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
+import javax.swing.table.TableColumn;
 
-public class FenetrePrincipale extends JFrame implements ActionListener, ListSelectionListener {
+import com.marta.domain.Commande;
+
+public class FenetrePrincipale extends JFrame implements ActionListener {
+	
 	/**
 	 * 
 	 */
@@ -20,7 +24,7 @@ public class FenetrePrincipale extends JFrame implements ActionListener, ListSel
 	// zone centre
 
 	private JPanel ZoneCentre;
-	private JTable commandes;
+	private JTable tableau;
 	private JScrollPane scpane1;
 
 	// zone sud
@@ -39,7 +43,9 @@ public class FenetrePrincipale extends JFrame implements ActionListener, ListSel
 	private JButton fournisseurs;
 
 	private MonDialogueCommande new_mon_dialog_command = null;
-
+	
+	private MyTableModel model;
+	
 	public FenetrePrincipale(String titre, int larg, int haut) {
 		super(titre);
 		this.setBounds(80, 20, larg, haut);
@@ -105,33 +111,25 @@ public class FenetrePrincipale extends JFrame implements ActionListener, ListSel
 		ZoneCentre.setPreferredSize(new Dimension(900, 550));
 		ZoneCentre.setLayout(new BorderLayout());
 
-		// tabela que no futuro vai ter un numero fixo de colunas e um numero
-		// dinamico de linhas
+		//JTABLE
+		
+		tableau = new JTable(new MyTableModel());
+		//tableau.setPreferredScrollableViewportSize(new Dimension (800, 500));
+		tableau.setFillsViewportHeight(true);
+		scpane1 = new JScrollPane(tableau);
+//		final MyTableRowSorter trs = new MyTableRowSorter(model);
+//		tableau.setRowSorter(trs);
+//		final RowFilter<MyTableModel,Object> rf = RowFilter.numberFilter(RowFilter.ComparisonType.AFTER,4,1);
+//		
+//		TableColumn tc = tableau.getColumnModel().getColumn(1);
+//		tc.setCellRenderer(new MyNoteRenderer());
+//		tc = tableau.getColumnModel().getColumn(0);
+//		tc.setPreferredWidth(100);
+//		tc.setCellRenderer(new MyNomRenderer());
+//
+//		tableau.setRowHeight(1,50);
 
-		/*
-		 * String[] columnNames = {"Desc. Commande", "Quantité", "Unités",
-		 * "Fourniseur", "Date Commande", "Date arrivée", "Date fin"};
-		 */
-
-		// Object [] [] data = null;
-
-		commandes = new JTable(30, 8);
-		/*
-		 * commandes.setShowVerticalLines(false);
-		 * commandes.setCellSelectionEnabled(true);
-		 * commandes.setColumnSelectionAllowed(true); //commandes.setBorder(new
-		 * LineBorder(null));
-		 * commandes.getColumnModel().getColumn(0).setPreferredWidth(346);
-		 * commandes.getColumnModel().getColumn(1).setPreferredWidth(34);
-		 * commandes.getColumnModel().getColumn(2).setPreferredWidth(33);
-		 * commandes.getColumnModel().getColumn(3).setPreferredWidth(31);
-		 * commandes.getColumnModel().getColumn(4).setPreferredWidth(28);
-		 * commandes.getColumnModel().getColumn(5).setPreferredWidth(28);
-		 * commandes.getColumnModel().getColumn(6).setPreferredWidth(28);
-		 */
-
-		scpane1 = new JScrollPane();
-		scpane1.setViewportView(commandes);
+		scpane1.setViewportView(tableau);
 
 		ZoneCentre.add(scpane1);
 
@@ -160,11 +158,11 @@ public class FenetrePrincipale extends JFrame implements ActionListener, ListSel
 		this.setVisible(true);
 	}
 
-	
-	public void refresh ()
+
+	public void refresh (Commande c)
 	{
-		// limpar jtable
-		// TODO
+		model.addCommande(c);
+		
 	}
 	// Méthode de l'interface ActionListener
 	public void actionPerformed(ActionEvent e) {
@@ -173,30 +171,14 @@ public class FenetrePrincipale extends JFrame implements ActionListener, ListSel
 				new_mon_dialog_command = new MonDialogueCommande(this, "Enresgistrement d'une commande");
 			}
 			new_mon_dialog_command.setVisible(true);
+			new_mon_dialog_command.setLocationRelativeTo(this);
 		} else if (e.getSource() == modifier) {
 			// coder ici
 		} else if (e.getSource() == quitter) {
-			// setVisible(false);
 			System.exit(1);
 		} else if (e.getSource() == fournisseurs) {
 			// coder ici
 		}
 	}
-
-	public void valueChanged(ListSelectionEvent e) {
-		// La valeur a changée dans la JList.
-		/*
-		 * int i = liste.getSelectedIndex(); if(i <= 10) {
-		 * monCanvas.setCouleur(couleurs[i]); } monCanvas.repaint();
-		 */
-	}
 } // Fin de la classe FenetrePrincipale
 
-// JTable tabelaGrafica;
-//
-// public void save() {
-// Commande newCommande = new Commande();
-// //newEncomenda.setPrice(fenetre.prix);
-//
-// //CommandeServiceLocator.getService().save(commande);
-// }

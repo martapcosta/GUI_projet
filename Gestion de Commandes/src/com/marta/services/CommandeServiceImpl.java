@@ -28,6 +28,7 @@ public class CommandeServiceImpl implements CommandeService {
 	public void save(Commande commande) {
 		if (commande.getId() > 0) {
 			// trouver commande de la liste e substituer pour celle-ci
+			this.listeCommandes.set(commande.getId(),commande);
 		} else {
 			commande.setId(this.conteurId++);
 			this.listeCommandes.add(commande);

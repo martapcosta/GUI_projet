@@ -14,17 +14,18 @@ public class Dialog_Modif_Succes extends JDialog implements ActionListener {
 	private JLabel label_conf;
 
 	private JButton okButton;
-
+		
+	
 	public Dialog_Modif_Succes(JDialog _parent, String title) {
 
 		
 			super(_parent, title);
-			setBounds(10, 60, 300, 300);
+			setBounds(10, 60, 300, 180);
 			getContentPane().setLayout(null);
 			{
 				label_conf = new JLabel("Modification enresgistrée!");
 				label_conf.setFont(new Font("Dialog", Font.BOLD, 14));
-				label_conf.setBounds(119, 95, 273, 19);
+				label_conf.setBounds(50, 10, 200, 30);
 				getContentPane().add(label_conf);
 			}
 			{
@@ -32,7 +33,7 @@ public class Dialog_Modif_Succes extends JDialog implements ActionListener {
 				okButton.addActionListener(this);
 				
 				okButton.setForeground(Color.BLACK);
-				okButton.setBounds(197, 149, 89, 39);
+				okButton.setBounds(110, 50, 70, 50);
 				getContentPane().add(okButton);
 			}
 			
@@ -43,6 +44,8 @@ public class Dialog_Modif_Succes extends JDialog implements ActionListener {
 		Object source = event.getSource();
 		if (source == okButton) {
 			setVisible(false);
+			this.getParent().setVisible(false);
+			
 		}
 	}
 
