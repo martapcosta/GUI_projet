@@ -34,7 +34,9 @@ public class MonDialogueCommande extends JDialog implements ActionListener {
 	// private FenetrePrincipale parent;
 
 	private JPanel panelCentre, panelSud;
-
+	
+	private int id = 0;
+	
 	private JComboBox<Object> fournisseur_box, unite_box;
 	private JButton enregistrer, ajout_fournisseur;
 	private JLabel desc_produit, quantite, unite, fournisseur, date_command, prix;
@@ -81,7 +83,9 @@ public class MonDialogueCommande extends JDialog implements ActionListener {
 		data_unit[3] = "gr";
 
 		unite_box = new JComboBox<Object>(data_unit);// combobox model
-
+		
+		fournisseur_box = new JComboBox<Object>();
+		
 		loadFournisseurs();
 
 		prix_txtfield = new JFormattedTextField(new Double(0.));
@@ -158,9 +162,10 @@ public class MonDialogueCommande extends JDialog implements ActionListener {
 
 		}
 		// combobox
-		fournisseur_box = new JComboBox<Object>();
+		
 		if (!(data_fournisseur == null)) {
 			
+			fournisseur_box.removeAllItems();
 			for (String string : data_fournisseur) {
 				
 				fournisseur_box.addItem(string);

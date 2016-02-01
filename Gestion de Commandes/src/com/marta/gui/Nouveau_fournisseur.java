@@ -95,10 +95,11 @@ public class Nouveau_fournisseur extends JDialog implements ActionListener {
 			if (modif_succ == null) {
 				modif_succ = new Dialog_Modif_Succes(this, "Nouveau Fournisseur");
 			}
+
+
 			modif_succ.setVisible(true);
 			modif_succ.setLocationRelativeTo(getParent());
 
-			setVisible(false);
 
 			// clean champs
 			nom_fourn_txfield.setText(null);
