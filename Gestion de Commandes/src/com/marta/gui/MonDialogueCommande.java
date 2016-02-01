@@ -10,6 +10,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Date;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -22,6 +23,7 @@ import javax.swing.JTextField;
 import javax.swing.event.TableModelListener;
 
 import com.marta.domain.Commande;
+import com.marta.domain.Fournisseur;
 
 public class MonDialogueCommande extends JDialog implements ActionListener {
 	/**
@@ -80,25 +82,7 @@ public class MonDialogueCommande extends JDialog implements ActionListener {
 
 		unite_box = new JComboBox<Object>(data_unit);// combobox model
 
-		// Fournisseurs - ComboBox
-
-		int n = FournisseurServiceLocator.getService().getTousFournisseurs().size();
-		String[] data_fournisseur = new String[n];
-
-		if (n == 0) {
-			data_fournisseur = null;
-		} else {
-			for (int i = 1; i < n + 1; i++) {
-
-				data_fournisseur[i] = FournisseurServiceLocator.getService().getTousFournisseurs().get(i)
-						.getNom_fournisseur();
-			}
-		}
-		// combobox
-		fournisseur_box = new JComboBox<Object>();
-		if (!(data_fournisseur == null)) {
-			fournisseur_box.addItem(data_fournisseur);
-		}
+		loadFournisseurs();
 
 		prix_txtfield = new JFormattedTextField(new Double(0.));
 		prix_txtfield.setPreferredSize(new Dimension(50, 20));
@@ -153,6 +137,35 @@ public class MonDialogueCommande extends JDialog implements ActionListener {
 		pack();
 		setLocationRelativeTo(_parent);
 		// setBounds(80, 20, 900, 500);
+	}
+
+	protected void loadFournisseurs() {
+		// Fournisseurs - ComboBox
+
+		List<Fournisseur> tousFournisseurs = FournisseurServiceLocator.getService().getTousFournisseurs();
+
+		String[] data_fournisseur = null;
+
+		if (tousFournisseurs != null && tousFournisseurs.size() > 0) {
+
+			data_fournisseur = new String[tousFournisseurs.size()];
+
+			for (int i = 0; i < tousFournisseurs.size(); i++) {
+
+				data_fournisseur[i] = FournisseurServiceLocator.getService().getTousFournisseurs().get(i)
+						.getNom_fournisseur();
+			}
+
+		}
+		// combobox
+		fournisseur_box = new JComboBox<Object>();
+		if (!(data_fournisseur == null)) {
+			
+			for (String string : data_fournisseur) {
+				
+				fournisseur_box.addItem(string);
+			}
+		}
 	}
 
 	/**
@@ -530,7 +543,7 @@ public class MonDialogueCommande extends JDialog implements ActionListener {
 		if (source == enregistrer) {
 			// enresgitrer une commmande
 			Commande commande = new Commande();
-			commande.setId(CommandeServiceLocator.getService().getConteurId());
+			// commande.setId(CommandeServiceLocator.getService().getConteurId());
 			commande.setDescriptif_produit(this.desc_produit_txtfield.getText());
 			commande.setQuantite((double) this.quantite_txtfield.getValue());
 			commande.setPrix((double) this.prix_txtfield.getValue());

@@ -83,7 +83,7 @@ public class Nouveau_fournisseur extends JDialog implements ActionListener {
 
 			// enresgitrer un fournisseur
 			Fournisseur fournisseur = new Fournisseur();
-			fournisseur.setId(FournisseurServiceLocator.getService().getConteurId());
+			// fournisseur.setId(FournisseurServiceLocator.getService().getConteurId());
 			fournisseur.setNom_fournisseur(this.nom_fourn_txfield.getText());
 			fournisseur.setAdresse(this.adresse_txfield.getText());
 			fournisseur.setEmail(this.email_txfield.getText());
@@ -92,24 +92,22 @@ public class Nouveau_fournisseur extends JDialog implements ActionListener {
 
 			// TODO refresh jtable - manque creer la JTABLE
 
-			
 			if (modif_succ == null) {
 				modif_succ = new Dialog_Modif_Succes(this, "Nouveau Fournisseur");
 			}
 			modif_succ.setVisible(true);
 			modif_succ.setLocationRelativeTo(getParent());
-			
+
 			setVisible(false);
-			
+
 			// clean champs
 			nom_fourn_txfield.setText(null);
 			adresse_txfield.setText(null);
 			email_txfield.setText(null);
-			
-			
 
-			
-			
+			// refresh combobox
+			((MonDialogueCommande) this.getParent()).loadFournisseurs();
+
 		} else if (source == quitter) {
 			setVisible(false);
 			// clean champs

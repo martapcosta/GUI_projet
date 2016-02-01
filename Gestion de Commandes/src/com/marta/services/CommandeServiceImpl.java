@@ -21,7 +21,7 @@ public class CommandeServiceImpl implements CommandeService {
 	}
 
 	private List<Commande> listeCommandes = new ArrayList<Commande>();
-	private int conteurId = 0;
+	private int conteurId = 1;
 
 	@Override
 	public List<Commande> getToutesCommandes() {
@@ -42,7 +42,7 @@ public class CommandeServiceImpl implements CommandeService {
 	public void save(Commande commande) {
 		if (commande.getId() > 0) {
 			// trouver commande de la liste e substituer pour celle-ci
-			this.listeCommandes.set(commande.getId(),commande);
+			this.listeCommandes.set(commande.getId()-1,commande);
 		} else {
 			commande.setId(this.conteurId++);
 			this.listeCommandes.add(commande);

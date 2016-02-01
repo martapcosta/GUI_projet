@@ -7,7 +7,7 @@ import com.marta.domain.Fournisseur;
 public class FournisseurServiceImpl implements FournisseurService{
 
 	private List<Fournisseur> listeFournisseurs = new ArrayList<Fournisseur>();
-	private int conteurId = 0;
+	private int conteurId = 1;
 	
 	@Override
 	public List<Fournisseur> getTousFournisseurs() {
@@ -28,7 +28,7 @@ public class FournisseurServiceImpl implements FournisseurService{
 	public void save(Fournisseur fournisseur) {
 		if (fournisseur.getId() > 0) {
 			// trouver commande de la liste e substituer pour celle-ci
-			this.listeFournisseurs.set(fournisseur.getId(),fournisseur);
+			this.listeFournisseurs.set(fournisseur.getId()-1,fournisseur);
 		} else {
 			fournisseur.setId(this.conteurId++);
 			this.listeFournisseurs.add(fournisseur);
