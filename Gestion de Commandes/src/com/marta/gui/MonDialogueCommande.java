@@ -1,6 +1,5 @@
 package com.marta.gui;
 
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -20,139 +19,142 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.event.TableModelListener;
 
 import com.marta.domain.Commande;
 
-
-public class MonDialogueCommande  extends JDialog implements ActionListener	{
+public class MonDialogueCommande extends JDialog implements ActionListener {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	//private FenetrePrincipale parent;
-	
-	private JPanel panelCentre,panelSud;
-	
-	
-	private JComboBox<Object>  fournisseur_box, unite_box;
+	// private FenetrePrincipale parent;
+
+	private JPanel panelCentre, panelSud;
+
+	private JComboBox<Object> fournisseur_box, unite_box;
 	private JButton enregistrer, ajout_fournisseur;
 	private JLabel desc_produit, quantite, unite, fournisseur, date_command, prix;
 	private JLabel date_arrive, date_fin_stock;
 	private JTextField desc_produit_txtfield;
-	private JFormattedTextField quantite_txtfield, prix_txtfield, date_command_txtfield,
-											date_arrive_txtfield, date_fin_stock_txtfield;
+	private JFormattedTextField quantite_txtfield, prix_txtfield, date_command_txtfield, date_arrive_txtfield,
+			date_fin_stock_txtfield;
 	private JLabel phrase_champs_oblig;
-	
+
 	private GridBagConstraints gbc = new GridBagConstraints();
 
 	private Nouveau_fournisseur new_fournisseur = null;
 	private Dialog_Modif_Succes new_dialog_modif_succ = null;
 
-
-	public MonDialogueCommande(JFrame _parent, String title)
-	{
+	public MonDialogueCommande(JFrame _parent, String title) {
 		// false --> dialogue non modal
-		super(_parent, title);//, false);
-		
-		
+		super(_parent, title);// , false);
+
 		setLayout(new BorderLayout());
-		
-		//ZONE CENTRE
+
+		// ZONE CENTRE
 		panelCentre = new JPanel();
-		//panelCentre.setPreferredSize(new Dimension(850,450));
+		// panelCentre.setPreferredSize(new Dimension(850,450));
 		panelCentre.setLayout(new GridBagLayout());
-		
+
 		// Créer les labels nord
 		desc_produit = new JLabel("*Descriptif du produit  ");
 		quantite = new JLabel("*Quantité  ");
 		unite = new JLabel("*Unité  ");
-		fournisseur = new JLabel ("*Fournisseur  ");
-		prix =  new JLabel ("*Prix de la commande (CHF):  ");
-		date_command = new JLabel ("*Commande effectuée le:  ");
-		date_arrive = new JLabel ("Commande arrivée le:  ");
-		date_fin_stock = new JLabel ("Date fin de stock  ");
-		
-		
+		fournisseur = new JLabel("*Fournisseur  ");
+		prix = new JLabel("*Prix de la commande (CHF):  ");
+		date_command = new JLabel("*Commande effectuée le:  ");
+		date_arrive = new JLabel("Commande arrivée le:  ");
+		date_fin_stock = new JLabel("Date fin de stock  ");
+
 		// Créer les jtextfields nord
 		desc_produit_txtfield = new JTextField(20);
 		quantite_txtfield = new JFormattedTextField(new Double(0.));
-		quantite_txtfield.setPreferredSize(new Dimension (50,20));
-		String [] data_unit = new String[4];
+		quantite_txtfield.setPreferredSize(new Dimension(50, 20));
+		String[] data_unit = new String[4];
 		data_unit[0] = "unité(s)";
 		data_unit[1] = "kg";
 		data_unit[2] = "litres";
 		data_unit[3] = "gr";
-	
-		unite_box = new JComboBox<Object>(data_unit);//combobox model
-		
-		//TEST- CHANGER APRES!!!!
-		String [] data_fournisseur = new String[4];
-		data_fournisseur[0] = "Ricoh";
-		data_fournisseur[1] = "Imprimerie XXXX";
-		data_fournisseur[2] = "Nespresso";
-		data_fournisseur[3] = "XXXXX";
-	
-		fournisseur_box = new JComboBox<Object>(data_fournisseur);//combobox model
-		
-		prix_txtfield = new JFormattedTextField (new Double(0.));
-		prix_txtfield.setPreferredSize(new Dimension (50,20));
-		date_command_txtfield = new JFormattedTextField (new Date());
-		date_command_txtfield.setPreferredSize(new Dimension (80,20));
-		date_arrive_txtfield = new JFormattedTextField (new Date());
-		date_arrive_txtfield.setPreferredSize(new Dimension (80,20));
-		date_fin_stock_txtfield = new JFormattedTextField (new Date());
-		date_fin_stock_txtfield.setPreferredSize(new Dimension (80,20));
-		
-		
-		gbc.insets = new Insets(4,4,4,4);
-		addComponents(desc_produit, desc_produit_txtfield, panelCentre,gbc);
-		addComponents(quantite, quantite_txtfield, panelCentre,gbc);
-		addComponentsComboBox(unite, unite_box, panelCentre,gbc);
-		addComponentsComboBox(fournisseur, fournisseur_box, panelCentre,gbc);
-		addComponents(prix, prix_txtfield, panelCentre,gbc);
-		addComponents(date_command, date_command_txtfield, panelCentre,gbc);
-		addComponents(date_arrive, date_arrive_txtfield, panelCentre,gbc);
-		addComponents(date_fin_stock, date_fin_stock_txtfield, panelCentre,gbc);
-		
-		//ZONE SUD
+
+		unite_box = new JComboBox<Object>(data_unit);// combobox model
+
+		// Fournisseurs - ComboBox
+
+		int n = FournisseurServiceLocator.getService().getTousFournisseurs().size();
+		String[] data_fournisseur = new String[n];
+
+		if (n == 0) {
+			data_fournisseur = null;
+		} else {
+			for (int i = 1; i < n + 1; i++) {
+
+				data_fournisseur[i] = FournisseurServiceLocator.getService().getTousFournisseurs().get(i)
+						.getNom_fournisseur();
+			}
+		}
+		// combobox
+		fournisseur_box = new JComboBox<Object>();
+		if (!(data_fournisseur == null)) {
+			fournisseur_box.addItem(data_fournisseur);
+		}
+
+		prix_txtfield = new JFormattedTextField(new Double(0.));
+		prix_txtfield.setPreferredSize(new Dimension(50, 20));
+		date_command_txtfield = new JFormattedTextField(new Date());
+		date_command_txtfield.setPreferredSize(new Dimension(80, 20));
+		date_arrive_txtfield = new JFormattedTextField(new Date());
+		date_arrive_txtfield.setPreferredSize(new Dimension(80, 20));
+		date_fin_stock_txtfield = new JFormattedTextField(new Date());
+		date_fin_stock_txtfield.setPreferredSize(new Dimension(80, 20));
+
+		gbc.insets = new Insets(4, 4, 4, 4);
+		addComponents(desc_produit, desc_produit_txtfield, panelCentre, gbc);
+		addComponents(quantite, quantite_txtfield, panelCentre, gbc);
+		addComponentsComboBox(unite, unite_box, panelCentre, gbc);
+		addComponentsComboBox(fournisseur, fournisseur_box, panelCentre, gbc);
+		addComponents(prix, prix_txtfield, panelCentre, gbc);
+		addComponents(date_command, date_command_txtfield, panelCentre, gbc);
+		addComponents(date_arrive, date_arrive_txtfield, panelCentre, gbc);
+		addComponents(date_fin_stock, date_fin_stock_txtfield, panelCentre, gbc);
+
+		// ZONE SUD
 		panelSud = new JPanel();
 		panelSud.setLayout(new FlowLayout());
-				
+
 		// Créer les boutons
 		enregistrer = new JButton("Enregistrer");
 		enregistrer.addActionListener(this);
 		ajout_fournisseur = new JButton("Ajouter un fournisseur");
 		ajout_fournisseur.addActionListener(this);
-		
-		//Phrase champs obligatoires
+
+		// Phrase champs obligatoires
 		phrase_champs_oblig = new JLabel("*Champs obligatoires");
-		
+
 		// adds to panelSud
 		panelSud.setBackground(Color.lightGray);
 		panelSud.add(phrase_champs_oblig);
 		panelSud.add(ajout_fournisseur);
 		panelSud.add(enregistrer);
-		
-		
+
 		// Création de la boîte de dialogue nouveua fournisseur
 		new_fournisseur = new Nouveau_fournisseur(this, "Nouveau Fournisseur");
-		
+
 		// Création de la boîte de dialogue _modif succes
-		new_dialog_modif_succ = new Dialog_Modif_Succes(this, "Confirmation");	
-		
-		add(panelCentre,BorderLayout.CENTER);
-		add(panelSud,BorderLayout.SOUTH);
-		
-		
-		//setDefaultCloseOperation(EXIT_ON_CLOSE);
-		//setVisible(true);
-		//Initialize this dialog to its preferred size.
+		new_dialog_modif_succ = new Dialog_Modif_Succes(this, "Confirmation");
+
+		add(panelCentre, BorderLayout.CENTER);
+		add(panelSud, BorderLayout.SOUTH);
+
+		// setDefaultCloseOperation(EXIT_ON_CLOSE);
+		// setVisible(true);
+		// Initialize this dialog to its preferred size.
 		pack();
 		setLocationRelativeTo(_parent);
-		//setBounds(80, 20, 900, 500);
+		// setBounds(80, 20, 900, 500);
 	}
-	
+
 	/**
 	 * @return the panelCentre
 	 */
@@ -161,7 +163,8 @@ public class MonDialogueCommande  extends JDialog implements ActionListener	{
 	}
 
 	/**
-	 * @param panelCentre the panelCentre to set
+	 * @param panelCentre
+	 *            the panelCentre to set
 	 */
 	public void setPanelCentre(JPanel panelCentre) {
 		this.panelCentre = panelCentre;
@@ -175,7 +178,8 @@ public class MonDialogueCommande  extends JDialog implements ActionListener	{
 	}
 
 	/**
-	 * @param panelSud the panelSud to set
+	 * @param panelSud
+	 *            the panelSud to set
 	 */
 	public void setPanelSud(JPanel panelSud) {
 		this.panelSud = panelSud;
@@ -189,7 +193,8 @@ public class MonDialogueCommande  extends JDialog implements ActionListener	{
 	}
 
 	/**
-	 * @param fournisseur_box the fournisseur_box to set
+	 * @param fournisseur_box
+	 *            the fournisseur_box to set
 	 */
 	public void setFournisseur_box(JComboBox<Object> fournisseur_box) {
 		this.fournisseur_box = fournisseur_box;
@@ -203,7 +208,8 @@ public class MonDialogueCommande  extends JDialog implements ActionListener	{
 	}
 
 	/**
-	 * @param unite_box the unite_box to set
+	 * @param unite_box
+	 *            the unite_box to set
 	 */
 	public void setUnite_box(JComboBox<Object> unite_box) {
 		this.unite_box = unite_box;
@@ -217,7 +223,8 @@ public class MonDialogueCommande  extends JDialog implements ActionListener	{
 	}
 
 	/**
-	 * @param enregistrer the enregistrer to set
+	 * @param enregistrer
+	 *            the enregistrer to set
 	 */
 	public void setEnregistrer(JButton enregistrer) {
 		this.enregistrer = enregistrer;
@@ -231,7 +238,8 @@ public class MonDialogueCommande  extends JDialog implements ActionListener	{
 	}
 
 	/**
-	 * @param ajout_fournisseur the ajout_fournisseur to set
+	 * @param ajout_fournisseur
+	 *            the ajout_fournisseur to set
 	 */
 	public void setAjout_fournisseur(JButton ajout_fournisseur) {
 		this.ajout_fournisseur = ajout_fournisseur;
@@ -245,7 +253,8 @@ public class MonDialogueCommande  extends JDialog implements ActionListener	{
 	}
 
 	/**
-	 * @param desc_produit the desc_produit to set
+	 * @param desc_produit
+	 *            the desc_produit to set
 	 */
 	public void setDesc_produit(JLabel desc_produit) {
 		this.desc_produit = desc_produit;
@@ -259,7 +268,8 @@ public class MonDialogueCommande  extends JDialog implements ActionListener	{
 	}
 
 	/**
-	 * @param quantite the quantite to set
+	 * @param quantite
+	 *            the quantite to set
 	 */
 	public void setQuantite(JLabel quantite) {
 		this.quantite = quantite;
@@ -273,7 +283,8 @@ public class MonDialogueCommande  extends JDialog implements ActionListener	{
 	}
 
 	/**
-	 * @param unite the unite to set
+	 * @param unite
+	 *            the unite to set
 	 */
 	public void setUnite(JLabel unite) {
 		this.unite = unite;
@@ -287,7 +298,8 @@ public class MonDialogueCommande  extends JDialog implements ActionListener	{
 	}
 
 	/**
-	 * @param fournisseur the fournisseur to set
+	 * @param fournisseur
+	 *            the fournisseur to set
 	 */
 	public void setFournisseur(JLabel fournisseur) {
 		this.fournisseur = fournisseur;
@@ -301,7 +313,8 @@ public class MonDialogueCommande  extends JDialog implements ActionListener	{
 	}
 
 	/**
-	 * @param date_command the date_command to set
+	 * @param date_command
+	 *            the date_command to set
 	 */
 	public void setDate_command(JLabel date_command) {
 		this.date_command = date_command;
@@ -315,7 +328,8 @@ public class MonDialogueCommande  extends JDialog implements ActionListener	{
 	}
 
 	/**
-	 * @param prix the prix to set
+	 * @param prix
+	 *            the prix to set
 	 */
 	public void setPrix(JLabel prix) {
 		this.prix = prix;
@@ -329,7 +343,8 @@ public class MonDialogueCommande  extends JDialog implements ActionListener	{
 	}
 
 	/**
-	 * @param date_arrive the date_arrive to set
+	 * @param date_arrive
+	 *            the date_arrive to set
 	 */
 	public void setDate_arrive(JLabel date_arrive) {
 		this.date_arrive = date_arrive;
@@ -343,7 +358,8 @@ public class MonDialogueCommande  extends JDialog implements ActionListener	{
 	}
 
 	/**
-	 * @param date_fin_stock the date_fin_stock to set
+	 * @param date_fin_stock
+	 *            the date_fin_stock to set
 	 */
 	public void setDate_fin_stock(JLabel date_fin_stock) {
 		this.date_fin_stock = date_fin_stock;
@@ -357,7 +373,8 @@ public class MonDialogueCommande  extends JDialog implements ActionListener	{
 	}
 
 	/**
-	 * @param desc_produit_txtfield the desc_produit_txtfield to set
+	 * @param desc_produit_txtfield
+	 *            the desc_produit_txtfield to set
 	 */
 	public void setDesc_produit_txtfield(JTextField desc_produit_txtfield) {
 		this.desc_produit_txtfield = desc_produit_txtfield;
@@ -371,7 +388,8 @@ public class MonDialogueCommande  extends JDialog implements ActionListener	{
 	}
 
 	/**
-	 * @param quantite_txtfield the quantite_txtfield to set
+	 * @param quantite_txtfield
+	 *            the quantite_txtfield to set
 	 */
 	public void setQuantite_txtfield(JFormattedTextField quantite_txtfield) {
 		this.quantite_txtfield = quantite_txtfield;
@@ -385,7 +403,8 @@ public class MonDialogueCommande  extends JDialog implements ActionListener	{
 	}
 
 	/**
-	 * @param prix_txtfield the prix_txtfield to set
+	 * @param prix_txtfield
+	 *            the prix_txtfield to set
 	 */
 	public void setPrix_txtfield(JFormattedTextField prix_txtfield) {
 		this.prix_txtfield = prix_txtfield;
@@ -399,7 +418,8 @@ public class MonDialogueCommande  extends JDialog implements ActionListener	{
 	}
 
 	/**
-	 * @param date_command_txtfield the date_command_txtfield to set
+	 * @param date_command_txtfield
+	 *            the date_command_txtfield to set
 	 */
 	public void setDate_command_txtfield(JFormattedTextField date_command_txtfield) {
 		this.date_command_txtfield = date_command_txtfield;
@@ -413,7 +433,8 @@ public class MonDialogueCommande  extends JDialog implements ActionListener	{
 	}
 
 	/**
-	 * @param date_arrive_txtfield the date_arrive_txtfield to set
+	 * @param date_arrive_txtfield
+	 *            the date_arrive_txtfield to set
 	 */
 	public void setDate_arrive_txtfield(JFormattedTextField date_arrive_txtfield) {
 		this.date_arrive_txtfield = date_arrive_txtfield;
@@ -427,7 +448,8 @@ public class MonDialogueCommande  extends JDialog implements ActionListener	{
 	}
 
 	/**
-	 * @param date_fin_stock_txtfield the date_fin_stock_txtfield to set
+	 * @param date_fin_stock_txtfield
+	 *            the date_fin_stock_txtfield to set
 	 */
 	public void setDate_fin_stock_txtfield(JFormattedTextField date_fin_stock_txtfield) {
 		this.date_fin_stock_txtfield = date_fin_stock_txtfield;
@@ -441,7 +463,8 @@ public class MonDialogueCommande  extends JDialog implements ActionListener	{
 	}
 
 	/**
-	 * @param phrase_champs_oblig the phrase_champs_oblig to set
+	 * @param phrase_champs_oblig
+	 *            the phrase_champs_oblig to set
 	 */
 	public void setPhrase_champs_oblig(JLabel phrase_champs_oblig) {
 		this.phrase_champs_oblig = phrase_champs_oblig;
@@ -455,7 +478,8 @@ public class MonDialogueCommande  extends JDialog implements ActionListener	{
 	}
 
 	/**
-	 * @param gbc the gbc to set
+	 * @param gbc
+	 *            the gbc to set
 	 */
 	public void setGbc(GridBagConstraints gbc) {
 		this.gbc = gbc;
@@ -469,7 +493,8 @@ public class MonDialogueCommande  extends JDialog implements ActionListener	{
 	}
 
 	/**
-	 * @param new_fournisseur the new_fournisseur to set
+	 * @param new_fournisseur
+	 *            the new_fournisseur to set
 	 */
 	public void setNew_fournisseur(Nouveau_fournisseur new_fournisseur) {
 		this.new_fournisseur = new_fournisseur;
@@ -482,73 +507,63 @@ public class MonDialogueCommande  extends JDialog implements ActionListener	{
 		return serialVersionUID;
 	}
 
-	private void addComponents(JLabel label, JTextField tf, JPanel p,
-                            GridBagConstraints gbc)
- {
-     gbc.anchor = GridBagConstraints.EAST;
-     gbc.gridwidth = GridBagConstraints.RELATIVE;
-     p.add(label, gbc);
-     gbc.anchor = GridBagConstraints.WEST;
+	private void addComponents(JLabel label, JTextField tf, JPanel p, GridBagConstraints gbc) {
+		gbc.anchor = GridBagConstraints.EAST;
+		gbc.gridwidth = GridBagConstraints.RELATIVE;
+		p.add(label, gbc);
+		gbc.anchor = GridBagConstraints.WEST;
 		gbc.gridwidth = GridBagConstraints.REMAINDER;
-     p.add(tf, gbc);
- }
+		p.add(tf, gbc);
+	}
 
-	private void addComponentsComboBox(JLabel label, JComboBox<?> cb, JPanel p,
-                            GridBagConstraints gbc)
- {
-     gbc.anchor = GridBagConstraints.EAST;
-     gbc.gridwidth = GridBagConstraints.RELATIVE;
-     p.add(label, gbc);
-     gbc.anchor = GridBagConstraints.WEST;
-     gbc.gridwidth = GridBagConstraints.REMAINDER;
-     p.add(cb, gbc);
- }
-	
-	public void actionPerformed(ActionEvent event)
-	{
+	private void addComponentsComboBox(JLabel label, JComboBox<?> cb, JPanel p, GridBagConstraints gbc) {
+		gbc.anchor = GridBagConstraints.EAST;
+		gbc.gridwidth = GridBagConstraints.RELATIVE;
+		p.add(label, gbc);
+		gbc.anchor = GridBagConstraints.WEST;
+		gbc.gridwidth = GridBagConstraints.REMAINDER;
+		p.add(cb, gbc);
+	}
+
+	public void actionPerformed(ActionEvent event) {
 		Object source = event.getSource();
-		if (source == enregistrer)
-		{
-			//enresgitrer une commmande
+		if (source == enregistrer) {
+			// enresgitrer une commmande
 			Commande commande = new Commande();
-			//commande.setId(1);
+			commande.setId(CommandeServiceLocator.getService().getConteurId());
 			commande.setDescriptif_produit(this.desc_produit_txtfield.getText());
-			commande.setQuantite((double)this.quantite_txtfield.getValue());
-			commande.setPrix((double)this.prix_txtfield.getValue());
-			commande.setDate_commande((Date)this.date_command_txtfield.getValue());
-			commande.setDate_arrivee((Date)this.date_arrive_txtfield.getValue());
-			commande.setDate_fin((Date)this.date_fin_stock_txtfield.getValue());
-			commande.setFournisseur((String)this.fournisseur_box.getSelectedItem());
-			commande.setUnite((String)this.unite_box.getSelectedItem());
-					
+			commande.setQuantite((double) this.quantite_txtfield.getValue());
+			commande.setPrix((double) this.prix_txtfield.getValue());
+			commande.setDate_commande((Date) this.date_command_txtfield.getValue());
+			commande.setDate_arrivee((Date) this.date_arrive_txtfield.getValue());
+			commande.setDate_fin((Date) this.date_fin_stock_txtfield.getValue());
+			commande.setFournisseur((String) this.fournisseur_box.getSelectedItem());
+			commande.setUnite((String) this.unite_box.getSelectedItem());
+
 			CommandeServiceLocator.getService().save(commande);
-					
-			//clean champs
+			// refresh jtable avec la nouvelle commande
+			((FenetrePrincipale) this.getParent()).refresh(commande);
+
+			// clean champs
 			desc_produit_txtfield.setText(null);
 			quantite_txtfield.setText(null);
 			prix_txtfield.setText(null);
 			date_command_txtfield.setText(null);
 			date_arrive_txtfield.setText(null);
 			date_fin_stock_txtfield.setText(null);
-					
-			
+
 			if (new_dialog_modif_succ == null) {
 				new_dialog_modif_succ = new Dialog_Modif_Succes(this, "Confirmation");
 			}
 			new_dialog_modif_succ.setVisible(true);
 			new_dialog_modif_succ.setLocationRelativeTo(getParent());
-			//refresh jtable
-			((FenetrePrincipale)this.getParent()).refresh(commande);
-			
-			
-		}
-		else if(source == ajout_fournisseur)
-		{
+
+		} else if (source == ajout_fournisseur) {
 			if (new_fournisseur == null) {
 				new_fournisseur = new Nouveau_fournisseur(this, "Nouveau Fournisseur");
 			}
 			new_fournisseur.setVisible(true);
 			new_fournisseur.setLocationRelativeTo(getParent());
 		}
-	}	
+	}
 }

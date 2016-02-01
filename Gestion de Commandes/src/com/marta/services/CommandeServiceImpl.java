@@ -6,8 +6,22 @@ import com.marta.domain.Commande;
 
 public class CommandeServiceImpl implements CommandeService {
 
+	/**
+	 * @return the conteurId
+	 */
+	public int getConteurId() {
+		return conteurId;
+	}
+
+	/**
+	 * @param conteurId the conteurId to set
+	 */
+	public void setConteurId(int conteurId) {
+		this.conteurId = conteurId;
+	}
+
 	private List<Commande> listeCommandes = new ArrayList<Commande>();
-	private int conteurId = 1;
+	private int conteurId = 0;
 
 	@Override
 	public List<Commande> getToutesCommandes() {

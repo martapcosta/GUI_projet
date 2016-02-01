@@ -59,7 +59,7 @@ public class FenetrePrincipale extends JFrame implements ActionListener {
 		ZoneSud.setPreferredSize(new Dimension(900, 60));
 		ZoneSud.setLayout(new GridLayout(1, 4, 0, 50));
 
-		// create icons boutons
+		//TODO create icons boutons
 		ImageIcon modifierIcon = new ImageIcon("load.gif");
 		ImageIcon ajouterIcon = new ImageIcon("save.gif");
 		// ImageIcon subscribeIcon = new ImageIcon("subscribe.gif");
@@ -112,8 +112,8 @@ public class FenetrePrincipale extends JFrame implements ActionListener {
 		ZoneCentre.setLayout(new BorderLayout());
 
 		//JTABLE
-		
-		tableau = new JTable(new MyTableModel());
+		model = new MyTableModel();
+		tableau = new JTable(model);
 		//tableau.setPreferredScrollableViewportSize(new Dimension (800, 500));
 		tableau.setFillsViewportHeight(true);
 		scpane1 = new JScrollPane(tableau);
@@ -135,7 +135,7 @@ public class FenetrePrincipale extends JFrame implements ActionListener {
 
 		// ZONENORD
 		ZoneNord = new JPanel();
-		label_entete = new JLabel("Historique");
+		label_entete = new JLabel("Historique des commandes");
 		ZoneNord.add(label_entete);
 		label_entete.setFont(new Font("Calibri", Font.PLAIN, 25));
 		ZoneNord.setBackground(Color.lightGray);
@@ -162,6 +162,7 @@ public class FenetrePrincipale extends JFrame implements ActionListener {
 	public void refresh (Commande c)
 	{
 		model.addCommande(c);
+	
 		
 	}
 	// Méthode de l'interface ActionListener

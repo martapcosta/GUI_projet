@@ -24,9 +24,21 @@ public interface CommandeService {
 	 */	
 	void save(Commande commande);
 	
+	
 	/**
 	 * Delete une commande
 	 * @return
 	 */	
 	void delete(Commande commande);
+	
+	
+	/**
+	 * @return the conteurId
+	 */
+	int getConteurId();
+
+	/**
+	 * @param conteurId the conteurId to set
+	 */
+	void setConteurId(int conteurId);
 }
