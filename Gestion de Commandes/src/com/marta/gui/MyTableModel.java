@@ -2,13 +2,15 @@ package com.marta.gui;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.EventListener;
+
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableRowSorter;
 
 import com.marta.domain.Commande;
 
-public class MyTableModel extends AbstractTableModel{
+public class MyTableModel extends AbstractTableModel {
 	/**
 	 * 
 	 */
@@ -65,8 +67,7 @@ public class MyTableModel extends AbstractTableModel{
 	}
 	
     public boolean isCellEditable(int rowIndex,int columnIndex) {
-		return false;
-    	//return columnIndex>0;
+		return columnIndex>0;
     }
     
 //    public Class getColumnClass(int columnIndex) {

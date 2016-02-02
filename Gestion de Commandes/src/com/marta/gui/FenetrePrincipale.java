@@ -2,6 +2,8 @@ package com.marta.gui;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Date;
+
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.TableColumn;
@@ -9,7 +11,21 @@ import javax.swing.table.TableColumn;
 import com.marta.domain.Commande;
 
 public class FenetrePrincipale extends JFrame implements ActionListener {
-	
+
+	/**
+	 * @return the tableau
+	 */
+	public JTable getTableau() {
+		return tableau;
+	}
+
+	/**
+	 * @param tableau the tableau to set
+	 */
+	public void setTableau(JTable tableau) {
+		this.tableau = tableau;
+	}
+
 	/**
 	 * 
 	 */
@@ -43,9 +59,10 @@ public class FenetrePrincipale extends JFrame implements ActionListener {
 	private JButton fournisseurs;
 
 	private MonDialogueCommande new_mon_dialog_command = null;
-	
+	private Modifier_Selection new_modif_selection = null;
 	private MyTableModel model;
-	
+	// private ListSelectionModel selectmodel;
+
 	public FenetrePrincipale(String titre, int larg, int haut) {
 		super(titre);
 		this.setBounds(80, 20, larg, haut);
@@ -59,7 +76,7 @@ public class FenetrePrincipale extends JFrame implements ActionListener {
 		ZoneSud.setPreferredSize(new Dimension(900, 60));
 		ZoneSud.setLayout(new GridLayout(1, 4, 0, 50));
 
-		//TODO create icons boutons
+		// TODO create icons boutons
 		ImageIcon modifierIcon = new ImageIcon("load.gif");
 		ImageIcon ajouterIcon = new ImageIcon("save.gif");
 		// ImageIcon subscribeIcon = new ImageIcon("subscribe.gif");
@@ -111,23 +128,24 @@ public class FenetrePrincipale extends JFrame implements ActionListener {
 		ZoneCentre.setPreferredSize(new Dimension(900, 550));
 		ZoneCentre.setLayout(new BorderLayout());
 
-		//JTABLE
+		// JTABLE
 		model = new MyTableModel();
 		tableau = new JTable(model);
-		//tableau.setPreferredScrollableViewportSize(new Dimension (800, 500));
+		// tableau.setPreferredScrollableViewportSize(new Dimension (800, 500));
 		tableau.setFillsViewportHeight(true);
 		scpane1 = new JScrollPane(tableau);
-//		final MyTableRowSorter trs = new MyTableRowSorter(model);
-//		tableau.setRowSorter(trs);
-//		final RowFilter<MyTableModel,Object> rf = RowFilter.numberFilter(RowFilter.ComparisonType.AFTER,4,1);
-//		
-//		TableColumn tc = tableau.getColumnModel().getColumn(1);
-//		tc.setCellRenderer(new MyNoteRenderer());
-//		tc = tableau.getColumnModel().getColumn(0);
-//		tc.setPreferredWidth(100);
-//		tc.setCellRenderer(new MyNomRenderer());
-//
-//		tableau.setRowHeight(1,50);
+		// final MyTableRowSorter trs = new MyTableRowSorter(model);
+		// tableau.setRowSorter(trs);
+		// final RowFilter<MyTableModel,Object> rf =
+		// RowFilter.numberFilter(RowFilter.ComparisonType.AFTER,4,1);
+		//
+		// TableColumn tc = tableau.getColumnModel().getColumn(1);
+		// tc.setCellRenderer(new MyNoteRenderer());
+		// tc = tableau.getColumnModel().getColumn(0);
+		// tc.setPreferredWidth(100);
+		// tc.setCellRenderer(new MyNomRenderer());
+		//
+		// tableau.setRowHeight(1,50);
 
 		scpane1.setViewportView(tableau);
 
@@ -149,37 +167,58 @@ public class FenetrePrincipale extends JFrame implements ActionListener {
 		PanelPrincipal.add(ZoneCentre, BorderLayout.CENTER);
 		PanelPrincipal.add(ZoneNord, BorderLayout.NORTH);
 
-		// Création de la boîte de dialogue
+		// Création de la boîte de dialogue COMMANDE
 		new_mon_dialog_command = new MonDialogueCommande(this, "Enresgistrement d'une commande");
+
+		// Création de la boîte de dialogue avertissement SELECTION
+		new_modif_selection = new Modifier_Selection(this, "Selection ligne table");
 
 		// Ajouter Panelprincipal
 		this.add(PanelPrincipal, BorderLayout.CENTER);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setVisible(true);
+
 	}
 
-
-	public void refresh (Commande c)
-	{
+	public void refresh(Commande c) {
 		model.addCommande(c);
-	
-		
+
 	}
+
 	// Méthode de l'interface ActionListener
 	public void actionPerformed(ActionEvent e) {
+		// AJOUTER
 		if (e.getSource() == ajouter) {
 			if (new_mon_dialog_command == null) {
 				new_mon_dialog_command = new MonDialogueCommande(this, "Enresgistrement d'une commande");
 			}
 			new_mon_dialog_command.setVisible(true);
 			new_mon_dialog_command.setLocationRelativeTo(this);
+			// MODIFIER
 		} else if (e.getSource() == modifier) {
-			// coder ici
+
+			if (tableau.getSelectedRow() == -1) {
+
+				if (new_modif_selection == null) {
+					new_modif_selection = new Modifier_Selection(this, "SELECTION");
+				}
+				new_modif_selection.setVisible(true);
+				new_modif_selection.setLocationRelativeTo(this);
+			} else {
+				if (new_mon_dialog_command == null) {
+					new_mon_dialog_command = new MonDialogueCommande(this, "Changement d'une commande");
+				}
+				new_mon_dialog_command.setVisible(true);
+				new_mon_dialog_command.setLocationRelativeTo(this);
+
+			}
+
+			// QUITTER
 		} else if (e.getSource() == quitter) {
 			System.exit(1);
+			// FOURNISSEURS
 		} else if (e.getSource() == fournisseurs) {
 			// coder ici
 		}
 	}
 } // Fin de la classe FenetrePrincipale
-
