@@ -2,8 +2,6 @@ package com.marta.gui;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.EventListener;
-
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableRowSorter;

@@ -19,6 +19,7 @@ import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -27,6 +28,118 @@ import com.marta.domain.Commande;
 import com.marta.domain.Fournisseur;
 
 public class MonDialogueCommande extends JDialog implements ActionListener {
+	/**
+	 * @return the fournisseur_box
+	 */
+	public JComboBox<Object> getFournisseur_box() {
+		return fournisseur_box;
+	}
+
+	/**
+	 * @param fournisseur_box the fournisseur_box to set
+	 */
+	public void setFournisseur_box(JComboBox<Object> fournisseur_box) {
+		this.fournisseur_box = fournisseur_box;
+	}
+
+	/**
+	 * @return the unite_box
+	 */
+	public JComboBox<Object> getUnite_box() {
+		return unite_box;
+	}
+
+	/**
+	 * @param unite_box the unite_box to set
+	 */
+	public void setUnite_box(JComboBox<Object> unite_box) {
+		this.unite_box = unite_box;
+	}
+
+	/**
+	 * @return the desc_produit_txtfield
+	 */
+	public JTextField getDesc_produit_txtfield() {
+		return desc_produit_txtfield;
+	}
+
+	/**
+	 * @param desc_produit_txtfield the desc_produit_txtfield to set
+	 */
+	public void setDesc_produit_txtfield(JTextField desc_produit_txtfield) {
+		this.desc_produit_txtfield = desc_produit_txtfield;
+	}
+
+	/**
+	 * @return the quantite_txtfield
+	 */
+	public JFormattedTextField getQuantite_txtfield() {
+		return quantite_txtfield;
+	}
+
+	/**
+	 * @param quantite_txtfield the quantite_txtfield to set
+	 */
+	public void setQuantite_txtfield(JFormattedTextField quantite_txtfield) {
+		this.quantite_txtfield = quantite_txtfield;
+	}
+
+	/**
+	 * @return the prix_txtfield
+	 */
+	public JFormattedTextField getPrix_txtfield() {
+		return prix_txtfield;
+	}
+
+	/**
+	 * @param prix_txtfield the prix_txtfield to set
+	 */
+	public void setPrix_txtfield(JFormattedTextField prix_txtfield) {
+		this.prix_txtfield = prix_txtfield;
+	}
+
+	/**
+	 * @return the date_command_txtfield
+	 */
+	public JFormattedTextField getDate_command_txtfield() {
+		return date_command_txtfield;
+	}
+
+	/**
+	 * @param date_command_txtfield the date_command_txtfield to set
+	 */
+	public void setDate_command_txtfield(JFormattedTextField date_command_txtfield) {
+		this.date_command_txtfield = date_command_txtfield;
+	}
+
+	/**
+	 * @return the date_arrive_txtfield
+	 */
+	public JFormattedTextField getDate_arrive_txtfield() {
+		return date_arrive_txtfield;
+	}
+
+	/**
+	 * @param date_arrive_txtfield the date_arrive_txtfield to set
+	 */
+	public void setDate_arrive_txtfield(JFormattedTextField date_arrive_txtfield) {
+		this.date_arrive_txtfield = date_arrive_txtfield;
+	}
+
+	/**
+	 * @return the date_fin_stock_txtfield
+	 */
+	public JFormattedTextField getDate_fin_stock_txtfield() {
+		return date_fin_stock_txtfield;
+	}
+
+	/**
+	 * @param date_fin_stock_txtfield the date_fin_stock_txtfield to set
+	 */
+	public void setDate_fin_stock_txtfield(JFormattedTextField date_fin_stock_txtfield) {
+		this.date_fin_stock_txtfield = date_fin_stock_txtfield;
+	}
+
 	/**
 	 * 
 	 */
@@ -196,59 +309,78 @@ public class MonDialogueCommande extends JDialog implements ActionListener {
 	@SuppressWarnings("unchecked")
 	public void actionPerformed(ActionEvent event) {
 		Object source = event.getSource();
+		//ENREGISTRER
 		if (source == enregistrer) {
-			// enresgitrer une commmande
-			Commande commande = new Commande();
-			JTable t = ((FenetrePrincipale) this.getParent()).getTableau();
-
-			if (t.getSelectedRow() > -1) {
+			
+			if ((desc_produit_txtfield.getText().equals("")) ||
+					(quantite_txtfield.getValue().equals(0.0)) || 
+					(prix_txtfield.getValue().equals(0.0)) || 
+					(date_command_txtfield.getValue().equals(null)) ||
+					(fournisseur_box.getSelectedItem()==null) ||
+					(unite_box.getSelectedItem()==null)){
+				
+				JOptionPane.showMessageDialog(this, "Remplir les champs obligatoires");
+				
+			}
+			else {
+				// enregistrer une commmande
+				Commande commande = new Commande();
+				JTable t = ((FenetrePrincipale) this.getParent()).getTableau();
 				int indexRow = t.getSelectedRow();
-				id = (int) t.getValueAt(indexRow, 0);
-				commande.setId(id);
+				
+				if (t.getSelectedRow() > -1) {
+					
+					id = (int) t.getValueAt(indexRow, 0);
+					commande.setId(id);
+				}
 
-				desc_produit_txtfield = (JTextField) t.getValueAt(indexRow, 1);
-				quantite_txtfield = (JFormattedTextField) t.getValueAt(indexRow, 2);
-				prix_txtfield = (JFormattedTextField) t.getValueAt(indexRow, 3);
-				date_command_txtfield = (JFormattedTextField) t.getValueAt(indexRow, 4);
-				date_arrive_txtfield = (JFormattedTextField) t.getValueAt(indexRow, 5);
-				date_fin_stock_txtfield = (JFormattedTextField) t.getValueAt(indexRow, 6);
-				fournisseur_box = (JComboBox<Object>) t.getValueAt(indexRow, 7);
-				unite_box = (JComboBox<Object>) t.getValueAt(indexRow, 8);
+				commande.setDescriptif_produit(this.desc_produit_txtfield.getText());
+				commande.setQuantite((double) this.quantite_txtfield.getValue());
+				commande.setPrix((double) this.prix_txtfield.getValue());
+				commande.setDate_commande((Date) this.date_command_txtfield.getValue());
+				commande.setDate_arrivee((Date) this.date_arrive_txtfield.getValue());
+				commande.setDate_fin((Date) this.date_fin_stock_txtfield.getValue());
+				commande.setFournisseur((String) this.fournisseur_box.getSelectedItem());
+				commande.setUnite((String) this.unite_box.getSelectedItem());
 
-			}
-			commande.setDescriptif_produit(this.desc_produit_txtfield.getText());
-			commande.setQuantite((double) this.quantite_txtfield.getValue());
-			commande.setPrix((double) this.prix_txtfield.getValue());
-			commande.setDate_commande((Date) this.date_command_txtfield.getValue());
-			commande.setDate_arrivee((Date) this.date_arrive_txtfield.getValue());
-			commande.setDate_fin((Date) this.date_fin_stock_txtfield.getValue());
-			commande.setFournisseur((String) this.fournisseur_box.getSelectedItem());
-			commande.setUnite((String) this.unite_box.getSelectedItem());
+				CommandeServiceLocator.getService().save(commande);
 
-			CommandeServiceLocator.getService().save(commande);
-			// refresh jtable avec la nouvelle commande
-			((FenetrePrincipale) this.getParent()).refresh(commande);
+				if (t.getSelectedRow() > -1) {
+					t.setValueAt(commande.getDescriptif_produit(), indexRow, 1);
+					t.setValueAt(commande.getQuantite(), indexRow, 2);
+					t.setValueAt(commande.getUnite(), indexRow, 3);
+					t.setValueAt(commande.getFournisseur(), indexRow, 4);
+					t.setValueAt(commande.getPrix(), indexRow, 5);
+					t.setValueAt(commande.getDate_commande(), indexRow, 6);
+					t.setValueAt(commande.getDate_arrivee(), indexRow, 7);
+					t.setValueAt(commande.getDate_fin(), indexRow, 8);
+				}
 
-			// clean champs
-			desc_produit_txtfield.setText(null);
-			quantite_txtfield.setText(null);
-			prix_txtfield.setText(null);
-			// date_command_txtfield.setText(null);
-			// date_arrive_txtfield.setText(null);
-			// date_fin_stock_txtfield.setText(null);
+				else {
+					// refresh jtable avec la nouvelle commande
+					((FenetrePrincipale) this.getParent()).refresh(commande);
+				}
 
-			if (new_dialog_modif_succ == null) {
-				new_dialog_modif_succ = new Dialog_Modif_Succes(this, "Confirmation");
-			}
-			new_dialog_modif_succ.setVisible(true);
-			new_dialog_modif_succ.setLocationRelativeTo(getParent());
+				// clean champs
+				desc_produit_txtfield.setText(null);
+				quantite_txtfield.setText(null);
+				prix_txtfield.setText(null);
+				
+				if (new_dialog_modif_succ == null) {
+					new_dialog_modif_succ = new Dialog_Modif_Succes(this, "Confirmation");
+				}
+				new_dialog_modif_succ.setVisible(true);
+				new_dialog_modif_succ.setLocationRelativeTo(getParent());
 
-		} else if (source == ajout_fournisseur) {
-			if (new_fournisseur == null) {
-				new_fournisseur = new Nouveau_fournisseur(this, "Nouveau Fournisseur");
-			}
-			new_fournisseur.setVisible(true);
-			new_fournisseur.setLocationRelativeTo(getParent());
+			} 
 		}
-	}
+			else if (source == ajout_fournisseur) {
+				if (new_fournisseur == null) {
+					new_fournisseur = new Nouveau_fournisseur(this, "Nouveau Fournisseur");
+				}
+				new_fournisseur.setVisible(true);
+				new_fournisseur.setLocationRelativeTo(getParent());
+			}
+
+}
 }

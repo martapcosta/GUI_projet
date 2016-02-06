@@ -15,11 +15,12 @@ public class Nouveau_fournisseur extends JDialog implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	private JButton valider, quitter;
-	private JLabel ajoutez_n_fourn, nom_fournisseur, adresse, email;
-	private JTextField nom_fourn_txfield, adresse_txfield, email_txfield;
+	private JLabel ajoutez_n_fourn, nom_fournisseur, adresse, email, telephone;
+	private JTextArea nom_fourn_textArea,email_textArea,adresse_textArea, tel_textArea; 
 
 	// private MonDialogueCommande parent;
 	private Dialog_Modif_Succes modif_succ = null;
+	private JTextArea textArea;
 
 	public Nouveau_fournisseur(MonDialogueCommande _parent, String title) {
 
@@ -39,37 +40,45 @@ public class Nouveau_fournisseur extends JDialog implements ActionListener {
 		nom_fournisseur.setBounds(20, 36, 112, 14);
 		contentPanel.add(nom_fournisseur);
 
-		nom_fourn_txfield = new JTextField();
-		nom_fourn_txfield.setBounds(140, 33, 189, 20);
-		contentPanel.add(nom_fourn_txfield);
-		nom_fourn_txfield.setColumns(10);
+		nom_fourn_textArea = new JTextArea();
+		nom_fourn_textArea.setBounds(140, 33, 189, 20);
+		contentPanel.add(nom_fourn_textArea);
+		nom_fourn_textArea.setColumns(10);
 
 		adresse = new JLabel("Adresse");
 		adresse.setBounds(64, 71, 60, 14);
 		contentPanel.add(adresse);
 
-		adresse_txfield = new JTextField();
-		adresse_txfield.setBounds(140, 68, 189, 60);
-		contentPanel.add(adresse_txfield);
-		adresse_txfield.setColumns(10);
+		adresse_textArea = new JTextArea();
+		adresse_textArea.setBounds(140, 68, 189, 60);
+		contentPanel.add(adresse_textArea);
+		adresse_textArea.setColumns(10);
 
 		email = new JLabel("E-mail");
 		email.setBounds(64, 143, 46, 14);
 		contentPanel.add(email);
 
-		email_txfield = new JTextField();
-		email_txfield.setBounds(140, 140, 189, 20);
-		contentPanel.add(email_txfield);
-		email_txfield.setColumns(10);
+		email_textArea = new JTextArea();
+		email_textArea.setBounds(140, 140, 189, 20);
+		contentPanel.add(email_textArea);
+		email_textArea.setColumns(10);
 
 		valider = new JButton("Valider");
-		valider.setBounds(309, 194, 89, 23);
+		valider.setBounds(309, 227, 89, 23);
 		contentPanel.add(valider);
 		valider.addActionListener(this);
 
 		quitter = new JButton("Quitter");
-		quitter.setBounds(202, 194, 89, 23);
+		quitter.setBounds(202, 227, 89, 23);
 		contentPanel.add(quitter);
+		
+		JLabel telephone = new JLabel("T\u00E9l\u00E9phone");
+		telephone.setBounds(64, 181, 68, 14);
+		contentPanel.add(telephone);
+		
+		tel_textArea = new JTextArea();
+		tel_textArea.setBounds(140, 175, 106, 20);
+		contentPanel.add(tel_textArea);
 		quitter.addActionListener(this);
 
 		// Création de la boîte de dialogue
@@ -84,9 +93,10 @@ public class Nouveau_fournisseur extends JDialog implements ActionListener {
 			// enresgitrer un fournisseur
 			Fournisseur fournisseur = new Fournisseur();
 			// fournisseur.setId(FournisseurServiceLocator.getService().getConteurId());
-			fournisseur.setNom_fournisseur(this.nom_fourn_txfield.getText());
-			fournisseur.setAdresse(this.adresse_txfield.getText());
-			fournisseur.setEmail(this.email_txfield.getText());
+			fournisseur.setNom_fournisseur(this.nom_fourn_textArea.getText());
+			fournisseur.setAdresse(this.adresse_textArea.getText());
+			fournisseur.setEmail(this.email_textArea.getText());
+			fournisseur.setTelephone(this.tel_textArea.getText());
 
 			FournisseurServiceLocator.getService().save(fournisseur);
 
@@ -102,9 +112,10 @@ public class Nouveau_fournisseur extends JDialog implements ActionListener {
 
 
 			// clean champs
-			nom_fourn_txfield.setText(null);
-			adresse_txfield.setText(null);
-			email_txfield.setText(null);
+			nom_fourn_textArea.setText(null);
+			adresse_textArea.setText(null);
+			email_textArea.setText(null);
+			tel_textArea.setText(null);
 
 			// refresh combobox
 			((MonDialogueCommande) this.getParent()).loadFournisseurs();
@@ -112,10 +123,10 @@ public class Nouveau_fournisseur extends JDialog implements ActionListener {
 		} else if (source == quitter) {
 			setVisible(false);
 			// clean champs
-			nom_fourn_txfield.setText(null);
-			adresse_txfield.setText(null);
-			email_txfield.setText(null);
+			nom_fourn_textArea.setText(null);
+			adresse_textArea.setText(null);
+			email_textArea.setText(null);
+			tel_textArea.setText(null);
 		}
 	}
-
 }

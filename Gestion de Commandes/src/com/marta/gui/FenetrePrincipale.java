@@ -2,12 +2,7 @@ package com.marta.gui;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Date;
-
 import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.table.TableColumn;
-
 import com.marta.domain.Commande;
 
 public class FenetrePrincipale extends JFrame implements ActionListener {
@@ -60,6 +55,7 @@ public class FenetrePrincipale extends JFrame implements ActionListener {
 
 	private MonDialogueCommande new_mon_dialog_command = null;
 	private Modifier_Selection new_modif_selection = null;
+	private Fenetre_Consult_Fournisseurs new_fen_consult_fournisseurs = null;
 	private MyTableModel model;
 	// private ListSelectionModel selectmodel;
 
@@ -173,6 +169,9 @@ public class FenetrePrincipale extends JFrame implements ActionListener {
 		// Création de la boîte de dialogue avertissement SELECTION
 		new_modif_selection = new Modifier_Selection(this, "Selection ligne table");
 
+		// Création de la boîte de dialogue fournisseurs
+		new_fen_consult_fournisseurs = new Fenetre_Consult_Fournisseurs(this, "Fournisseurs");
+
 		// Ajouter Panelprincipal
 		this.add(PanelPrincipal, BorderLayout.CENTER);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -197,7 +196,7 @@ public class FenetrePrincipale extends JFrame implements ActionListener {
 			// MODIFIER
 		} else if (e.getSource() == modifier) {
 
-			if (tableau.getSelectedRow() == -1) {
+			if (tableau.getSelectedRow() ==-1) {
 
 				if (new_modif_selection == null) {
 					new_modif_selection = new Modifier_Selection(this, "SELECTION");
@@ -205,9 +204,22 @@ public class FenetrePrincipale extends JFrame implements ActionListener {
 				new_modif_selection.setVisible(true);
 				new_modif_selection.setLocationRelativeTo(this);
 			} else {
+				
 				if (new_mon_dialog_command == null) {
 					new_mon_dialog_command = new MonDialogueCommande(this, "Changement d'une commande");
 				}
+				int indexRow = tableau.getSelectedRow();
+
+				new_mon_dialog_command.getDesc_produit_txtfield().setText((String)tableau.getValueAt(indexRow,1));
+				new_mon_dialog_command.getQuantite_txtfield().setText(String.valueOf(tableau.getValueAt(indexRow,2)));
+				new_mon_dialog_command.getUnite_box().setSelectedItem((String)tableau.getValueAt(indexRow,3));
+				new_mon_dialog_command.getFournisseur_box().setSelectedItem((String)tableau.getValueAt(indexRow,4));
+				new_mon_dialog_command.getPrix_txtfield().setText(String.valueOf(tableau.getValueAt(indexRow,5)));
+				new_mon_dialog_command.getDate_command_txtfield().setText((tableau.getValueAt(indexRow,6)).toString());
+				new_mon_dialog_command.getDate_arrive_txtfield().setText((tableau.getValueAt(indexRow,7).toString()));
+				new_mon_dialog_command.getDate_fin_stock_txtfield().setText((tableau.getValueAt(indexRow,8).toString()));
+
+				
 				new_mon_dialog_command.setVisible(true);
 				new_mon_dialog_command.setLocationRelativeTo(this);
 
@@ -218,7 +230,12 @@ public class FenetrePrincipale extends JFrame implements ActionListener {
 			System.exit(1);
 			// FOURNISSEURS
 		} else if (e.getSource() == fournisseurs) {
-			// coder ici
+			if (new_fen_consult_fournisseurs == null) {
+				new_fen_consult_fournisseurs = new Fenetre_Consult_Fournisseurs(this, "Fournisseurs");
+			}
+			new_fen_consult_fournisseurs.setVisible(true);
+			new_fen_consult_fournisseurs.setLocationRelativeTo(this);
+			
 		}
 	}
 } // Fin de la classe FenetrePrincipale

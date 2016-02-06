@@ -8,6 +8,20 @@ import com.marta.domain.Fournisseur;
 
 public class FournisseurServiceImpl implements FournisseurService {
 
+	/**
+	 * @return the listeFournisseurs
+	 */
+	public List<Fournisseur> getListeFournisseurs() {
+		return listeFournisseurs;
+	}
+
+	/**
+	 * @param listeFournisseurs the listeFournisseurs to set
+	 */
+	public void setListeFournisseurs(List<Fournisseur> listeFournisseurs) {
+		this.listeFournisseurs = listeFournisseurs;
+	}
+
 	private List<Fournisseur> listeFournisseurs = new ArrayList<Fournisseur>();
 	private int conteurId = 1;
 
