@@ -73,26 +73,26 @@ public class FenetrePrincipale extends JFrame implements ActionListener {
 		ZoneSud.setLayout(new GridLayout(1, 4, 0, 50));
 
 		// TODO create icons boutons
-		ImageIcon modifierIcon = new ImageIcon("load.gif");
-		ImageIcon ajouterIcon = new ImageIcon("save.gif");
-		// ImageIcon subscribeIcon = new ImageIcon("subscribe.gif");
-		// ImageIcon unsubscribeIcon = new ImageIcon("unsubscribe.gif");
+		ImageIcon modifierIcon = new ImageIcon(getClass().getResource("modifier.gif"));
+		ImageIcon ajouterIcon = new ImageIcon(getClass().getResource("ajouter.gif"));
+		ImageIcon lupaIcon = new ImageIcon(getClass().getResource("lupa.gif"));
+		ImageIcon quitterIcon = new ImageIcon(getClass().getResource("quitter.gif"));
 
 		// Créer les boutons
 		// Bouton Consulter les fournisseurs
-		fournisseurs = new JButton("Fournisseurs"); // creation du bouton
+		fournisseurs = new JButton("Fournisseurs",lupaIcon); // creation du bouton
 		fournisseurs.addActionListener(this); // actionListener
 		fournisseurs_panel = new JPanel(); // creation du jpanel du bouton
 											// fournisseurs
 		fournisseurs_panel.setBackground(Color.lightGray);// set color de
 															// fournisseurs_panel
 		fournisseurs_panel.add(fournisseurs);// adition de bouton au jpanel
-		fournisseurs.setPreferredSize(new Dimension(110, 40));// dimensioné le
+		fournisseurs.setPreferredSize(new Dimension(140, 40));// dimensioné le
 																// bouton
 		ZoneSud.add(fournisseurs_panel);// add jpanel à la zone sud
 
 		// Bouton Quitter le programme
-		quitter = new JButton("Quitter");
+		quitter = new JButton("Quitter",quitterIcon);
 		quitter.addActionListener(this);
 		quitter_panel = new JPanel();
 		quitter_panel.setBackground(Color.lightGray);
@@ -102,6 +102,7 @@ public class FenetrePrincipale extends JFrame implements ActionListener {
 
 		// Bouton Modifier une commande
 		modifier = new JButton("Modifier", modifierIcon);
+		modifier.setIcon(modifierIcon);
 		modifier.addActionListener(this);
 		modifier_panel = new JPanel();
 		modifier_panel.setBackground(Color.lightGray);
@@ -127,22 +128,23 @@ public class FenetrePrincipale extends JFrame implements ActionListener {
 		// JTABLE
 		model = new MyTableModel();
 		tableau = new JTable(model);
+		tableau.getColumnModel().getColumn(6).setCellRenderer(new DateCellRenderer());
+		tableau.getColumnModel().getColumn(7).setCellRenderer(new DateCellRenderer());
+		tableau.getColumnModel().getColumn(8).setCellRenderer(new DateCellRenderer());
+		
+		tableau.getColumnModel().getColumn(0).setPreferredWidth(10);
+		tableau.getColumnModel().getColumn(1).setPreferredWidth(125);
+		tableau.getColumnModel().getColumn(2).setPreferredWidth(70);
+		tableau.getColumnModel().getColumn(3).setPreferredWidth(60);
+		tableau.getColumnModel().getColumn(4).setPreferredWidth(125);
+		tableau.getColumnModel().getColumn(5).setPreferredWidth(40);
+		tableau.getColumnModel().getColumn(6).setPreferredWidth(40);
+		tableau.getColumnModel().getColumn(7).setPreferredWidth(40);
+		tableau.getColumnModel().getColumn(8).setPreferredWidth(40);
+		
 		// tableau.setPreferredScrollableViewportSize(new Dimension (800, 500));
 		tableau.setFillsViewportHeight(true);
 		scpane1 = new JScrollPane(tableau);
-		// final MyTableRowSorter trs = new MyTableRowSorter(model);
-		// tableau.setRowSorter(trs);
-		// final RowFilter<MyTableModel,Object> rf =
-		// RowFilter.numberFilter(RowFilter.ComparisonType.AFTER,4,1);
-		//
-		// TableColumn tc = tableau.getColumnModel().getColumn(1);
-		// tc.setCellRenderer(new MyNoteRenderer());
-		// tc = tableau.getColumnModel().getColumn(0);
-		// tc.setPreferredWidth(100);
-		// tc.setCellRenderer(new MyNomRenderer());
-		//
-		// tableau.setRowHeight(1,50);
-
 		scpane1.setViewportView(tableau);
 
 		ZoneCentre.add(scpane1);
@@ -215,11 +217,10 @@ public class FenetrePrincipale extends JFrame implements ActionListener {
 				new_mon_dialog_command.getUnite_box().setSelectedItem((String)tableau.getValueAt(indexRow,3));
 				new_mon_dialog_command.getFournisseur_box().setSelectedItem((String)tableau.getValueAt(indexRow,4));
 				new_mon_dialog_command.getPrix_txtfield().setText(String.valueOf(tableau.getValueAt(indexRow,5)));
-				new_mon_dialog_command.getDate_command_txtfield().setText((tableau.getValueAt(indexRow,6)).toString());
-				new_mon_dialog_command.getDate_arrive_txtfield().setText((tableau.getValueAt(indexRow,7).toString()));
-				new_mon_dialog_command.getDate_fin_stock_txtfield().setText((tableau.getValueAt(indexRow,8).toString()));
+				new_mon_dialog_command.getDate_command_txtfield().setValue((tableau.getValueAt(indexRow,6)));
+				new_mon_dialog_command.getDate_arrive_txtfield().setValue((tableau.getValueAt(indexRow,7)));
+				new_mon_dialog_command.getDate_fin_stock_txtfield().setValue((tableau.getValueAt(indexRow,8)));
 
-				
 				new_mon_dialog_command.setVisible(true);
 				new_mon_dialog_command.setLocationRelativeTo(this);
 
@@ -235,7 +236,7 @@ public class FenetrePrincipale extends JFrame implements ActionListener {
 			}
 			new_fen_consult_fournisseurs.setVisible(true);
 			new_fen_consult_fournisseurs.setLocationRelativeTo(this);
-			
+			new_fen_consult_fournisseurs.refreshFournisseurs();
 		}
 	}
 } // Fin de la classe FenetrePrincipale

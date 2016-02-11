@@ -11,7 +11,7 @@ public class Fenetre_Consult_Fournisseurs extends JDialog implements ActionListe
 
 	private JPanel PanelPrincipal;
 
-	//private int id;
+	// private int id;
 
 	// zone nord
 	private JPanel ZoneNord;
@@ -44,8 +44,9 @@ public class Fenetre_Consult_Fournisseurs extends JDialog implements ActionListe
 		ZoneSud.setBackground(Color.lightGray);
 		ZoneSud.setPreferredSize(new Dimension(900, 60));
 
-		// Créer les boutons
-		quitter = new JButton("Quitter"); // creation du bouton
+		// Créer le bouton
+		ImageIcon quitterIcon = new ImageIcon(getClass().getResource("quitter.gif"));
+		quitter = new JButton("Quitter",quitterIcon); // creation du bouton
 		quitter.addActionListener(this); // actionListener
 		quitter_panel = new JPanel(); // creation du jpanel du bouton
 
@@ -66,19 +67,15 @@ public class Fenetre_Consult_Fournisseurs extends JDialog implements ActionListe
 		model = new MyTableModel_Fournisseur();
 		tableau = new JTable(model);
 		tableau.setFillsViewportHeight(true);
+		tableau.getColumnModel().getColumn(0).setPreferredWidth(60);
+		tableau.getColumnModel().getColumn(1).setPreferredWidth(250);
+		tableau.getColumnModel().getColumn(2).setPreferredWidth(200);
+		tableau.getColumnModel().getColumn(3).setPreferredWidth(15);
+		
 		scpane1 = new JScrollPane(tableau);
 		scpane1.setViewportView(tableau);
 
-		// show tous les fournisseurs
-		List<Fournisseur> fourn = FournisseurServiceLocator.getService().getTousFournisseurs();
-		
-		for (int i = 0; i < fourn.size(); i++) {
-			tableau.setValueAt(fourn.get(i).getId(), i, 1);
-			tableau.setValueAt(fourn.get(i).getNom_fournisseur(), i, 2);
-			tableau.setValueAt(fourn.get(i).getAdresse(), i, 3);
-			tableau.setValueAt(fourn.get(i).getEmail(), i, 4);
-			tableau.setValueAt(fourn.get(i).getTelephone(), i, 5);
-		}
+		refreshFournisseurs();
 
 		ZoneCentre.add(scpane1);
 
@@ -101,10 +98,22 @@ public class Fenetre_Consult_Fournisseurs extends JDialog implements ActionListe
 		// Ajouter Panelprincipal
 		this.add(PanelPrincipal, BorderLayout.CENTER);
 
+	}
 
+	protected void refreshFournisseurs() {
+		// show tous les fournisseurs
+		List<Fournisseur> fourn = FournisseurServiceLocator.getService().getTousFournisseurs();
+
+		if (fourn.size() > 0) {
+			model.removeAllFournisseurs();
+			for (int i = 0; i < fourn.size(); i++) {
+				refresh(fourn.get(i));
+			}
+		}
 	}
 
 	public void refresh(Fournisseur f) {
+
 		model.addFournisseur(f);
 
 	}

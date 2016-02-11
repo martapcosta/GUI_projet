@@ -9,6 +9,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -204,11 +206,15 @@ public class MonDialogueCommande extends JDialog implements ActionListener {
 
 		prix_txtfield = new JFormattedTextField(new Double(0.));
 		prix_txtfield.setPreferredSize(new Dimension(50, 20));
-		date_command_txtfield = new JFormattedTextField(new Date());
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+		date_command_txtfield = new JFormattedTextField(df);
+		date_command_txtfield.setValue(new Date());
 		date_command_txtfield.setPreferredSize(new Dimension(80, 20));
-		date_arrive_txtfield = new JFormattedTextField(new Date());
+		date_arrive_txtfield = new JFormattedTextField(df);
+		date_arrive_txtfield.setValue(new Date());
 		date_arrive_txtfield.setPreferredSize(new Dimension(80, 20));
-		date_fin_stock_txtfield = new JFormattedTextField(new Date());
+		date_fin_stock_txtfield = new JFormattedTextField(df);
+		//date_fin_stock_txtfield.setValue(new Date());
 		date_fin_stock_txtfield.setPreferredSize(new Dimension(80, 20));
 
 		gbc.insets = new Insets(4, 4, 4, 4);
@@ -249,12 +255,9 @@ public class MonDialogueCommande extends JDialog implements ActionListener {
 		add(panelCentre, BorderLayout.CENTER);
 		add(panelSud, BorderLayout.SOUTH);
 
-		// setDefaultCloseOperation(EXIT_ON_CLOSE);
-		// setVisible(true);
-		// Initialize this dialog to its preferred size.
 		pack();
 		setLocationRelativeTo(_parent);
-		// setBounds(80, 20, 900, 500);
+
 	}
 
 	protected void loadFournisseurs() {
@@ -296,15 +299,6 @@ public class MonDialogueCommande extends JDialog implements ActionListener {
 		p.add(tf, gbc);
 	}
 
-	// private void addComponentsComboBox(JLabel label, JComboBox<?> cb, JPanel
-	// p, GridBagConstraints gbc) {
-	// gbc.anchor = GridBagConstraints.EAST;
-	// gbc.gridwidth = GridBagConstraints.RELATIVE;
-	// p.add(label, gbc);
-	// gbc.anchor = GridBagConstraints.WEST;
-	// gbc.gridwidth = GridBagConstraints.REMAINDER;
-	// p.add(cb, gbc);
-	// }
 
 	@SuppressWarnings("unchecked")
 	public void actionPerformed(ActionEvent event) {
@@ -333,6 +327,7 @@ public class MonDialogueCommande extends JDialog implements ActionListener {
 					id = (int) t.getValueAt(indexRow, 0);
 					commande.setId(id);
 				}
+
 
 				commande.setDescriptif_produit(this.desc_produit_txtfield.getText());
 				commande.setQuantite((double) this.quantite_txtfield.getValue());

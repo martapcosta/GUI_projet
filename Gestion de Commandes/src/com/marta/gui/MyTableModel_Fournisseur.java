@@ -39,11 +39,10 @@ public class MyTableModel_Fournisseur extends AbstractTableModel {
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {	
 		switch (columnIndex) {
-		case 0: return fournisseurs.get(rowIndex).getId();
-		case 1: return fournisseurs.get(rowIndex).getNom_fournisseur();
-		case 2: return fournisseurs.get(rowIndex).getAdresse();
-		case 3: return fournisseurs.get(rowIndex).getEmail();
-		case 4: return fournisseurs.get(rowIndex).getTelephone();
+		case 0: return fournisseurs.get(rowIndex).getNom_fournisseur();
+		case 1: return fournisseurs.get(rowIndex).getAdresse();
+		case 2: return fournisseurs.get(rowIndex).getEmail();
+		case 3: return fournisseurs.get(rowIndex).getTelephone();
 		}			
 	return null;
 	}
@@ -64,15 +63,13 @@ public class MyTableModel_Fournisseur extends AbstractTableModel {
 	// set donnees
     public void setValueAt(Object v, int rowIndex, int columnIndex) {
 		switch (columnIndex) {
-			case 0: fournisseurs.get(rowIndex).setId((Integer)v);
+			case 0: fournisseurs.get(rowIndex).setNom_fournisseur((String)v); 
 			break;
-			case 1: fournisseurs.get(rowIndex).setNom_fournisseur((String)v); 
+			case 1: fournisseurs.get(rowIndex).setAdresse((String)v);
 			break;
-			case 2: fournisseurs.get(rowIndex).setAdresse((String)v);
+			case 2: fournisseurs.get(rowIndex).setEmail((String)v); 
 			break;
-			case 3: fournisseurs.get(rowIndex).setEmail((String)v); 
-			break;
-			case 4: fournisseurs.get(rowIndex).setTelephone((String)v);
+			case 3: fournisseurs.get(rowIndex).setTelephone((String)v);
 			break;
 		}
 		System.out.println("changement de donnees");
@@ -94,6 +91,14 @@ public class MyTableModel_Fournisseur extends AbstractTableModel {
          
         fireTableRowsDeleted(rowIndex, rowIndex);
     }
+    
+    public void removeAllFournisseurs() {
+    fournisseurs = new ArrayList<Fournisseur>();
+    	
+    }
+    
+
+    
 }
 
 // trier
